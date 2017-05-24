@@ -1,0 +1,20 @@
+Assignment-2
+
+
+Name:- Lakshya Kumar
+RollNo:- 153050051
+
+
+Things that i have tried during the assignment:-
+
+   -> First, I have done the assignment with single perceptron and with that i have got the accuracy= 0.88(approx)
+   -> Second, I have tried to code the neural network in which there is one hidden layer and one output layer. The number of nodes in the hidden layer can be anything and the number of nodes in the output layer are two. With this neural network i have got the accuracy= 0.61 
+   -> Finally, I have tried another neural network having one hidden layer with 30 nodes(nodes can be anything) and only 1 output node. Then I have got the accuracy as 0.88(approx). 
+
+
+Code Description :- 
+
+1. There are two function feedforwardpredictor() and backpropagateEvaluator().
+2. In feedforwardpredictor() function, hidden nodes output and final output is calculated and finally if there is an error then the backpropagateEvaluator() function is called, that will perform the updation of weights. 
+3. I have done the min/max normalization of the feature vector in order to train the neural netwrok and when I am testing the code I have also done the min/max normalization in the test feature vector.
+4. Finally, after training Test_Data_Predictor() function is called to do the prediction of mails. 

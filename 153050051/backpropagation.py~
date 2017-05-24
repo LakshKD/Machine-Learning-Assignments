@@ -1,0 +1,184 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Apr 14 15:53:09 2016
+
+@author: laksh
+"""
+
+import numpy as np
+import csv
+import math as mp
+
+
+def Test_Data_Predictor():
+    hidden_output = np.zeros(Num_of_Hidden_Nodes)
+    b = np.ones(1600)
+    Test_feature_vector = np.loadtxt('TestX.csv', delimiter=',', usecols=range(0, 57))
+    Test_feature_vector = np.column_stack((Test_feature_vector,b))
+    
+    for l in range(0,58):
+        mi = np.min(Test_feature_vector[:,l])
+        ma = np.max(Test_feature_vector[:,l])
+        if (ma-mi)!=0:
+            for k in range(0,1600):
+                Test_feature_vector[k][l] = (Test_feature_vector[k][l]-mi)/(ma-mi)            
+    
+    for i in range(0,1600):
+        for j in range(0,Num_of_Hidden_Nodes):
+            s = np.dot(W1[j],Test_feature_vector[i])
+            hidden_output[j] = 1/(1+mp.exp(-1*s))
+        for q in range(0,Num_of_Output_Nodes):
+            s = np.dot(W2[q],hidden_output)
+            o = 1/(1+mp.exp(-1*s))
+            if o >=0.5:
+                p[i] = 1
+            else:
+                p[i] = 0
+
+
+def backpropagateEvaluator(exp,actual):
+    global W1
+    global W2
+    global X
+    global alpha
+    global hidden_Layer_Nodes_output
+    global Num_of_Hidden_Nodes
+    global final_output
+    global Num_of_Output_Nodes
+    
+    del_E_by_delsigma_output = np.zeros(Num_of_Output_Nodes)
+    del_E_by_delsigma_hidden = np.zeros(Num_of_Hidden_Nodes)
+    
+    del_E_by_delsigma_output[0] = -1*(actual - final_output[0])
+    
+    for m1 in range(0,Num_of_Hidden_Nodes):
+        for j in range(0,Num_of_Output_Nodes):
+            d = final_output[j]*(1-final_output[j])
+            e = del_E_by_delsigma_output[j]*d
+            del_E_by_delsigma_hidden[m1] = del_E_by_delsigma_hidden[m1]+e*W2[j][m1] 
+    
+    #Update Rule for hidden layer
+    for j1 in range(0,Num_of_Hidden_Nodes):
+         for n1 in range(0,58):
+             k = hidden_Layer_Nodes_output[j1]*(1-hidden_Layer_Nodes_output[j1])
+             g = del_E_by_delsigma_hidden[j1]*k
+             W1[j1][n1] = W1[j1][n1] - alpha*g*X[exp][n1] 
+    
+    #Update Rule for Output Layer
+    for i2 in range(0,Num_of_Output_Nodes):
+        for j2 in range(0,Num_of_Hidden_Nodes):
+            p = final_output[i2]*(1-final_output[i2])
+            q = del_E_by_delsigma_output[i2]*p
+            W2[i2][j2] = W2[i2][j2] - alpha*q*hidden_Layer_Nodes_output[j2]
+
+
+
+
+
+def feedforwardpredictor():
+    global W1
+    global W2
+    global X
+    global Train_actual_output
+    global hidden_Layer_Nodes_output
+    global Num_of_Hidden_Nodes
+    global final_output
+    global alpha
+
+    for i in range(0,3000):
+        
+        
+        
+        for j in range(0,Num_of_Hidden_Nodes):
+            s = np.dot(W1[j],X[i])
+            hidden_Layer_Nodes_output[j] =1/(1+mp.exp(-1*s))
+            
+        for k in range(0,Num_of_Output_Nodes):
+            s = np.dot(W2[k],hidden_Layer_Nodes_output)
+            final_output[k] = 1/(1+mp.exp(-1*s))
+
+        if final_output[0] >=0.5:
+            observed_output = 1
+        else:
+            observed_output = 0
+        
+        
+        if observed_output != Train_actual_output[i]:
+            backpropagateEvaluator(i,Train_actual_output[i])
+
+
+
+
+
+
+data = np.loadtxt('Train.csv', delimiter=',', usecols=range(0, 58))
+
+Train_actual_output = [row[57] for row in data]
+
+a = np.ones(3000)
+
+Train_feature_vector = np.loadtxt('Train.csv', delimiter=',', usecols=range(0, 57))
+
+X = np.column_stack((Train_feature_vector,a))
+
+for l in range(0,58):
+    mi = np.min(X[:,l])
+    ma = np.max(X[:,l])
+    if (ma-mi)!=0:
+        for k in range(0,3000):
+            X[k][l] = (X[k][l]-mi)/(ma-mi)
+
+    
+
+    
+Num_of_Hidden_Nodes = 30
+
+Num_of_Output_Nodes = 1
+
+p = np.zeros((1600))
+
+hidden_Layer_Nodes_output = np.zeros(Num_of_Hidden_Nodes)
+
+final_output = np.zeros(Num_of_Output_Nodes)
+
+alpha = 0.5
+    
+W1 = np.random.rand(Num_of_Hidden_Nodes,58) #Hidden Layer Weights
+W2 = np.random.rand(Num_of_Output_Nodes,Num_of_Hidden_Nodes) #Output Layer Weights
+    
+#initializing weights of hidden layer
+for weight1 in range(0,Num_of_Hidden_Nodes):
+    for attribute1 in range(0,58):
+        if W1[weight1][attribute1] < 0.5:
+            W1[weight1][attribute1] = -1*W1[weight1][attribute1] 
+
+for h_nodes in range(0,Num_of_Hidden_Nodes):
+    W1[h_nodes][57] = 1
+    
+#initializing weights of output layer
+for weight2 in range(0,Num_of_Output_Nodes):
+    for attribute2 in range(0,Num_of_Hidden_Nodes):
+        if W2[weight2][attribute2] < 0.5:
+            W2[weight2][attribute2] = -1*W2[weight2][attribute2] 
+    
+for i in range(0,500):
+    #print i
+    feedforwardpredictor()
+    
+   
+    
+Test_Data_Predictor()   
+
+    
+with open('Final_backProp.csv', "w") as csv_file:
+    writer = csv.writer(csv_file, delimiter=',')
+    writer.writerow(['Id','Label'])
+    for i in range(0,1600):
+        writer.writerow([i,int(p[i])])    
+    
+    
+    
+
+
+
+

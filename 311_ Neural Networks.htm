@@ -1,0 +1,92 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body link="#0000ff" vlink="#800080">HTML&gt;
+
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="Generator" content="Microsoft Word 97">
+<title>311: Neural Networks</title>
+<meta name="Template" content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+
+
+
+<i><p>CIS 311: Neural Networks</p>
+</i><b><font size="5"><p align="CENTER">Sigmoidal Perceptrons</p></font></b>
+<b><p>1. Sigmoidal Perceptron</p></b>
+<p>The simple single-layer Perceptrons with threshold or linear 
+activation functions are not generalizable to more powerful learning 
+mechanisms like multilayer neural networks.
+That is why, single-layer Perceptrons with sigmoidal activation 
+functions are developed. The sigmoidal Perceptron produces output:</p>
+<p align="CENTER"><i>o</i> = <font face="Symbol">s</font>( <i>s</i> ) = 1 / ( 1 + e<i><sup>-s </sup></i>), where: <i>s</i>= <font face="Symbol">&#931;</font><i><sub>i=0</sub><sup>d</sup></i> <i>w<sub>i</sub></i> <i>x<sub>i</sub></i> </p>
+
+<b><p>2. Training Sigmoidal Perceptrons</p></b>
+<p>The <i>Gradient descent rule</i> for training sigmoidal Perceptrons is again: </p>
+<p align="CENTER"><i>w<sub>i</sub></i> = <i>w<sub>i</sub></i> - <font face="Symbol">&#951;</font> <font face="Symbol">&#8706;</font><i>E</i>/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i></p>
+
+<p>The difference is in the error derivative <font face="Symbol">&#8706;</font><i>E</i>/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i>, which due to the use of the sigmoidal function <font face="Symbol">s</font>( <i>s</i> ) becomes:
+<font face="Symbol"></font></p><p><font face="Symbol">&#8706;</font> <i>E</i>/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i> 	= <font face="Symbol">&#8706;</font> ( ( ½ )<font face="Symbol">&#931;</font> <i><sub>e</sub></i>( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> )<sup>2</sup>)/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i></p><dir>
+<p>		= ( ½ )<font face="Symbol">&#931;</font><i><sub>e</sub></i><font face="Symbol">&#8706;</font>( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> )<sup>2</sup>/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i></p>
+<p>		= ( ½ )<font face="Symbol">&#931;</font><i><sub>e</sub></i>2( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> )<font face="Symbol">&#8706;</font>( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> )/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i></p>
+<p>		= <font face="Symbol">&#931;</font><i><sub>e</sub></i>( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> )<font face="Symbol">&#8706;</font>( <i>y<sub>e</sub></i> - <font face="Symbol">s</font>( <i>s</i> ) )/<font face="Symbol">&#8706;</font><i>w<sub>i</sub></i></p>
+<p>		= <font face="Symbol">&#931;</font><i><sub>e</sub></i>( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> ) <font face="Symbol">s</font>'( <i>s</i> ) ( -<i>x<sub>ie</sub></i> )</p>
+</dir>
+<br>where <i>x<sub>ie</sub></i> denotes the <i>i</i>-th component of the example <p></p>
+<p>The <i>Gradient descent training rule</i> for training sigmoidal Perceptrons is:</p>
+<i></i><p align="CENTER"><i>w<sub>i</sub></i> = <i>w<sub>i</sub></i> + <font face="Symbol">&#951;</font> <font face="Symbol">&#931;</font><sub><i>e</i></sub>( <i>y<sub>e</sub></i>–<i>o<sub>e</sub></i> ) <font face="Symbol">s</font>'( <i>s</i> ) <i>x<sub>ie</sub></i></p>
+<p>where: <font face="Symbol">s</font>'( <i>s</i> ) = <font face="Symbol">s</font>( <i>s</i> )( 1 - <font face="Symbol">s</font>( <i>s</i> ) ).
+</p>
+
+<b><u></u></b><u></u><p><u><b>Gradient Descent Learning Algorithm for <i>Sigmoidal Perceptrons</i></b></u></p>
+<i></i><p><i>Initialization</i>:	Examples {( <b>x</b><i><sub>e</sub></i>, <i>y<sub>e</sub></i>)}<sub><i>e</i>=1</sub><sup>N</sup>, initial weights <i>w<sub>i</sub></i> set to small random values, learning rate parameter <font face="Symbol">&#951;</font> = 0.1</p>
+<i></i><p><i>Repeat</i></p><dir>
+<p>	<i>for each</i> training example ( <b>x</b><i><sub>e</sub></i>, <i>y<sub>e </sub></i>)</p><dir>
+<i></i><p><i>	- calculate</i> the output: <i>o</i> = <font face="Symbol">s</font>( <i>s</i> ) = 1 / ( 1 + e<i><sup>-s </sup></i>), where: <i>s</i>= <font face="Symbol">&#931;</font><i><sub>i=0</sub><sup>d</sup></i> <i>w<sub>i</sub></i> <i>x<sub>i</sub></i>
+</p><p>	- if the Perceptron does not respond correctly compute weight <i>corrections</i>:</p></dir><dir>
+<p>			<font face="Symbol">&#916;</font>w<sub>i</sub> = <font face="Symbol">&#916;</font><i>w<sub>i</sub></i> + <font face="Symbol">&#951;</font> ( <i>y<sub>e</sub></i> - o<i><sub>e</sub></i> )  <font face="Symbol">s</font>( <i>s</i> )( 1 - <font face="Symbol">s</font>( <i>s</i> )) <i>x<sub>ie</sub></i></p>
+</dir>
+<p>		<i>update</i> the weights with the accumulated error from all examples</p>
+<p>	<i>w<sub>i</sub></i> = <i>w<sub>i</sub></i> + <font face="Symbol">&#916;</font><i>w<sub>i</sub></i> // <font face="Courier New" size="2">Gradient Descent Rule</font></p></dir>
+
+<i></i><p><i>until</i> termination condition is satisfied.</p>
+
+<p><i>Example</i>: 	Suppose an example of Perceptron which accepts two inputs <i>x<sub>1</sub></i> and <i>x<sub>2</sub></i>, 
+with weights <i>w<sub>1</sub></i> = 0.5 and <i>w<sub>2</sub></i> = 0.3 and <i>w<sub>0</sub></i> = -1. </p>
+<p>Let the following example is given: <i>x<sub>1</sub></i> = 2, <i>x<sub>2</sub></i> = 1, <i>y</i> = 0
+<br>The output of the Perceptron is :</p>
+<p align="CENTER"><i>o</i> = <font face="Symbol">s</font>( -1 + 2 * 0.5 + 1 * 0.3 ) = <font face="Symbol">s</font>( 0.3 ) = 0.5744</p>
+<p>The weight updates according to the gradient descent algorithm will be:</p>
+<p align="CENTER"><font face="Symbol">&#916;</font><i>w<sub>0</sub></i> = ( 0 - 0.5744 ) * 0.5744 * ( 1 -0.5744 ) * 1 = - 0.1404</p>
+<p align="CENTER"><font face="Symbol">&#916;</font><i>w<sub>1</sub></i> = ( 0 - 0.5744 ) * 0.5744 * ( 1 -0.5744 ) * 2 = - 0.2808</p>
+<p align="CENTER"><font face="Symbol">&#916;</font><i>w<sub>2</sub></i> = ( 0 - 0.5744 ) * 0.5744 * ( 1 -0.5744 ) * 1 = - 0.1404</p>
+
+<p>Let another example is given: <i>x<sub>1</sub></i> = 1, <i>x<sub>2</sub></i> = 2, <i>y</i> = 1
+</p><p>The output of the Perceptron is :</p>
+<p align="CENTER"><i>o</i> = <font face="Symbol">s</font>( -1 + 1 * 0.5 + 2 * 0.3 ) = <font face="Symbol">s</font>( 0.1 ) = 0.525</p>
+<p>The weight updates according to the gradient descent algorithm will be:</p>
+<p align="CENTER"><font face="Symbol">&#916;</font><i>w<sub>0</sub></i> = - 0.1404 + ( 1 - 0.525 ) * 0.525 * ( 1 - 0.525 ) * 1 = -0.0219</p>
+<p align="CENTER"><font face="Symbol">&#916;</font><i>w<sub>1</sub></i> = - 0.2808 + ( 1 - 0.525 ) * 0.525 * ( 1 - 0.525 ) * 1 = -0.1623</p>
+<p align="CENTER"><font face="Symbol">&#916;</font><i>w<sub>2</sub></i> = - 0.1404 + ( 1 - 0.525 ) * 0.525 * ( 1 - 0.525 ) * 2 = 0.0966</p> 
+			
+<p>If there are no more examples in the batch, the weights will be modified as follows:</p>	
+<p align="CENTER"><i>w<sub>0</sub></i> = - 1 + ( -0.0219 ) = -1.0219</p>
+<p align="CENTER"><i>w<sub>1</sub></i> = 0.5 + ( -0.1623 ) = 0.3966</p>
+<p align="CENTER"><i>w<sub>2</sub></i> = 0.3 + 0.0966 = 0.3966</p>
+
+
+<b><u></u></b><u></u><p><u><b>Incremental Gradient Descent Learning Algorithm for <i>Sigmoidal Perceptrons</i></b></u></p>
+<i></i><p><i>Initialization</i>:	Examples {( <b>x</b><i><sub>e</sub></i>, <i>y<sub>e</sub></i>)}<sub><i>e</i>=1</sub><sup>N</sup>, initial weights <i>w<sub>i</sub></i> set to small random values, learning rate parameter <font face="Symbol">h</font> = 0.1</p>
+<i></i><p><i>Repeat</i></p><dir>
+<p>	<i>for each</i> training example ( <b>x</b><i><sub>e</sub></i>, <i>y<sub>e </sub></i>)</p><dir>
+<i></i><p><i>	- calculate</i> the output: <i>o</i> = <font face="Symbol">s</font>( <i>s</i> ) = 1 / ( 1 + e<i><sup>-s </sup></i>), where: <i>s</i>= <font face="Symbol">&#931;</font><i><sub>i=0</sub><sup>d</sup></i> <i>w<sub>i</sub></i> <i>x<sub>i</sub></i>
+</p><p>	- if the Perceptron does not respond correctly <i>update the weights</i>:</p></dir><dir>
+<p>			<i>w<sub>i</sub></i> = <i>w<sub>i</sub></i> + <font face="Symbol">&#951;</font> ( <i>y<sub>e</sub></i> - o<i><sub>e</sub></i> )  <font face="Symbol">s</font>( <i>s</i> )( 1 - <font face="Symbol">s</font>( <i>s</i> )) <i>x<sub>ie</sub> // <font face="Courier New" size="2">Incremental Gradient Descent Rule</font></i></p>
+</dir></dir>
+<i></i><p><i>until</i> termination condition is satisfied.</p>
+
+
+<p><b>Suggested Readings</b>:</p>
+<p>Bishop,C. (1995) "<i>Neural Networks for Pattern Recognition</i>", Oxford University Press, Oxford, UK, pp.98-105.</p>
+
+<p>Haykin, Simon. (1999). <i>"Neural Networks. A Comprehensive Foundation"</i>, Second Edition, Prentice-Hall, Inc., New Jersey, 1999.</p>
+
+
+</body></html>
